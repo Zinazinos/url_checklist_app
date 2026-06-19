@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./backend/urllist_checking_api
+      dockerfile: Dockerfile
+    container_name: url_checker_backend
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend/urllist_checking_web
+      dockerfile: Dockerfile
+    container_name: url_checker_frontend
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/urllist_checking_web/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8080:80"
+    restart: unless-stopped
