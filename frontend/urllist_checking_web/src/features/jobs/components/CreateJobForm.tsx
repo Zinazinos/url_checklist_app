@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { useJobsStore } from '../../../store/jobs.store'
 
-interface CreateJobFormProps {
-  isSubmitting: boolean
-  error: string | null
-  onSubmit: (rawInput: string) => Promise<void>
-}
-
-export function CreateJobForm({ isSubmitting, error, onSubmit }: CreateJobFormProps) {
+export function CreateJobForm() {
   const [input, setInput] = useState('')
+  const isSubmitting = useJobsStore((state) => state.createJobLoading)
+  const error = useJobsStore((state) => state.createJobError)
+  const onSubmit = useJobsStore((state) => state.createJobFromInput)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()

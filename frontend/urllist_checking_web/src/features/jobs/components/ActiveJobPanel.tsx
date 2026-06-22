@@ -1,13 +1,5 @@
-import type { JobDetails } from '../../../types/jobs'
+import { useJobsStore } from '../../../store/jobs.store'
 import { StatusBadge } from './StatusBadge'
-
-interface ActiveJobPanelProps {
-  activeJob: JobDetails | null
-  isLoading: boolean
-  error: string | null
-  isCancelling: boolean
-  onCancel: () => Promise<void>
-}
 
 const TERMINAL_STATUSES = new Set(['completed', 'cancelled', 'failed'])
 
@@ -18,13 +10,13 @@ function formatDate(isoDate?: string): string {
   return new Date(isoDate).toLocaleString()
 }
 
-export function ActiveJobPanel({
-  activeJob,
-  isLoading,
-  error,
-  isCancelling,
-  onCancel,
-}: ActiveJobPanelProps) {
+export function ActiveJobPanel() {
+  const activeJob = useJobsStore((state) => state.activeJob)
+  const isLoading = useJobsStore((state) => state.activeJobLoading)
+  const error = useJobsStore((state) => state.activeJobError)
+  const isCancelling = useJobsStore((state) => state.cancelJobLoading)
+  const onCancel = useJobsStore((state) => state.cancelActiveJob)
+
   if (!activeJob) {
     return (
       <section className="card">

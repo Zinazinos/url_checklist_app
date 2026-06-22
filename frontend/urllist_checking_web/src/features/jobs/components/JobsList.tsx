@@ -1,27 +1,18 @@
-import type { JobSummary } from '../../../types/jobs'
+import { useJobsStore } from '../../../store/jobs.store'
 import { StatusBadge } from './StatusBadge'
-
-interface JobsListProps {
-  jobs: JobSummary[]
-  activeJobId: string | null
-  isLoading: boolean
-  error: string | null
-  onRefresh: () => Promise<void>
-  onSelect: (jobId: string) => Promise<void>
-}
 
 function formatDate(isoDate: string): string {
   return new Date(isoDate).toLocaleString()
 }
 
-export function JobsList({
-  jobs,
-  activeJobId,
-  isLoading,
-  error,
-  onRefresh,
-  onSelect,
-}: JobsListProps) {
+export function JobsList() {
+  const jobs = useJobsStore((state) => state.jobs)
+  const activeJobId = useJobsStore((state) => state.activeJobId)
+  const isLoading = useJobsStore((state) => state.jobsLoading)
+  const error = useJobsStore((state) => state.jobsError)
+  const onRefresh = useJobsStore((state) => state.fetchJobs)
+  const onSelect = useJobsStore((state) => state.setActiveJob)
+
   return (
     <section className="card">
       <div className="card-header">
